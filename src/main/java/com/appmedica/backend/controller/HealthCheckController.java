@@ -10,4 +10,5 @@ public class HealthCheckController {
     public String home() {
         return "Backend activo y funcionando.";
     }
+
 }
