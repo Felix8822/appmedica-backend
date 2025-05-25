@@ -49,6 +49,7 @@
 			<optional>true</optional>
 		</dependency>
 
+
 		<!-- Jakarta Persistence (para reemplazar javax.persistence) -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
