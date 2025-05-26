@@ -43,6 +43,7 @@ public class AlarmaController {
         }).orElse(null);
     }
 
+
     @DeleteMapping("/{id}")
     public void borrar(@PathVariable Long id) {
         alarmaRepository.deleteById(id);
