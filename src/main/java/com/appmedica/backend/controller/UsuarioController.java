@@ -1,10 +1,14 @@
 package com.appmedica.backend.controller;
 
+import com.appmedica.backend.model.LoginRequest;
 import com.appmedica.backend.model.Usuario;
 import com.appmedica.backend.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -48,4 +52,22 @@ public class UsuarioController {
     public void borrarUsuario(@PathVariable Long id) {
         usuarioRepository.deleteById(id);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByCorreoElectronico(loginRequest.getCorreoElectronico());
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+
+            if (usuario.getContrasena().equals(loginRequest.getContrasena())) {
+                return ResponseEntity.ok(usuario); // También podrías devolver solo nombre + id
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+    }
+
 }
