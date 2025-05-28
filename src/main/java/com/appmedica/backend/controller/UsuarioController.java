@@ -6,6 +6,8 @@ import com.appmedica.backend.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,9 @@ public class UsuarioController {
 
     @PostMapping("/usuarios")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String contrasenaCifrada = encoder.encode(usuario.getContrasena());
+        usuario.setContrasena(contrasenaCifrada);
         return usuarioRepository.save(usuario);
     }
 
@@ -59,9 +64,10 @@ public class UsuarioController {
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (usuario.getContrasena().equals(loginRequest.getContrasena())) {
-                return ResponseEntity.ok(usuario); // También podrías devolver solo nombre + id
+            if (encoder.matches(loginRequest.getContrasena(), usuario.getContrasena())) {
+                return ResponseEntity.ok(usuario); // ✅ login correcto
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
             }
@@ -69,5 +75,6 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
     }
+
 
 }
