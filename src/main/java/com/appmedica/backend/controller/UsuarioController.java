@@ -57,7 +57,6 @@ public class UsuarioController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByCorreoElectronico(loginRequest.getCorreoElectronico());
 
-
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
 
