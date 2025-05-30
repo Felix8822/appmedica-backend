@@ -35,12 +35,7 @@ public class AlarmaController {
         this.medicamentoRepository = medicamentoRepository;
     }
 
-    @PostMapping
-    public Alarma crear(@RequestBody Alarma alarma) {
-        return alarmaRepository.save(alarma);
-    }
-
-    @GetMapping
+     @GetMapping
     public List<Alarma> obtenerTodas() {
         return alarmaRepository.findAll();
     }
