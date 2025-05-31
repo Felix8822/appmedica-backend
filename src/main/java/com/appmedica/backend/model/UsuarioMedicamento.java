@@ -3,21 +3,23 @@ package com.appmedica.backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuario_medicamentos")
+@Table(name = "medicamentos_usuarios")
 public class UsuarioMedicamento {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @ManyToOne
+    @JoinColumn(name = "medicamento_id")
     private Medicamento medicamento;
 
-    // Getters y Setters
+    // Getters y setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

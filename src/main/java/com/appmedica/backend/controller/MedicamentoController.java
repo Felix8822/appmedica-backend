@@ -1,4 +1,3 @@
-// MedicamentoController.java
 package com.appmedica.backend.controller;
 
 import com.appmedica.backend.model.Medicamento;
@@ -30,16 +29,23 @@ public class MedicamentoController {
 
     @PostMapping("/{usuarioId}")
     public ResponseEntity<Void> crearMedicamento(@PathVariable Long usuarioId, @RequestBody Medicamento medicamento) {
-        medicamentoRepository.save(medicamento);
+        // Buscar medicamento por nombre (ignorando mayúsculas/minúsculas)
+        Medicamento medicamentoExistente = medicamentoRepository.findByNombreIgnoreCase(medicamento.getNombre()).orElse(null);
+
+        // Si existe, usar ese; si no, guardar el nuevo
+        Medicamento medicamentoParaAsignar = medicamentoExistente != null ? medicamentoExistente : medicamentoRepository.save(medicamento);
 
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
         if (usuario != null) {
-            UsuarioMedicamento rel = new UsuarioMedicamento();
-            rel.setUsuario(usuario);
-            rel.setMedicamento(medicamento);
-            usuarioMedicamentoRepository.save(rel);
+            // Comprobar si ya existe la relación para no duplicar
+            boolean yaExisteRelacion = usuarioMedicamentoRepository.existsByUsuarioAndMedicamento(usuario, medicamentoParaAsignar);
+            if (!yaExisteRelacion) {
+                UsuarioMedicamento rel = new UsuarioMedicamento();
+                rel.setUsuario(usuario);
+                rel.setMedicamento(medicamentoParaAsignar);
+                usuarioMedicamentoRepository.save(rel);
+            }
         }
-
         return ResponseEntity.ok().build();
     }
 
