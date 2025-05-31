@@ -18,13 +18,9 @@ public class MedicamentoController {
     }
 
     @PostMapping
-    public Medicamento crear(@RequestBody Medicamento medicamento) {
-        return medicamentoRepository.save(medicamento);
-    }
-
-    @GetMapping
-    public List<Medicamento> obtenerTodos() {
-        return medicamentoRepository.findAll();
+    public ResponseEntity<Void> crearMedicamento(@RequestBody Medicamento medicamento) {
+        medicamentoRepository.save(medicamento);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -46,11 +42,7 @@ public class MedicamentoController {
         medicamentoRepository.deleteById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> crearMedicamento(@RequestBody Medicamento medicamento) {
-        medicamentoRepository.save(medicamento);
-        return ResponseEntity.ok().build();
-    }
+
 
     @GetMapping
     public List<Medicamento> listarMedicamentos() {
