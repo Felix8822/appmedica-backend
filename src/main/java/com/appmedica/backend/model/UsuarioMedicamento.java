@@ -3,7 +3,7 @@ package com.appmedica.backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuarios_medicamentos")
+@Table(name = "usuario_medicamentos")
 public class UsuarioMedicamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
