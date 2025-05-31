@@ -2,6 +2,7 @@ package com.appmedica.backend.controller;
 
 import com.appmedica.backend.model.Medicamento;
 import com.appmedica.backend.repository.MedicamentoRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,5 +44,16 @@ public class MedicamentoController {
     @DeleteMapping("/{id}")
     public void borrar(@PathVariable Long id) {
         medicamentoRepository.deleteById(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> crearMedicamento(@RequestBody Medicamento medicamento) {
+        medicamentoRepository.save(medicamento);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public List<Medicamento> listarMedicamentos() {
+        return medicamentoRepository.findAll();
     }
 }
