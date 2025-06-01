@@ -78,6 +78,8 @@ public class AlarmaController {
         alarma.setMedicamento(medicamento.get());
 
         alarmaRepository.save(alarma);
+        System.out.println("Hora recibida: " + request.getHora());
+
         return ResponseEntity.ok("Alarma guardada correctamente");
     }
 
