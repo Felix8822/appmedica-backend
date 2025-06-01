@@ -22,7 +22,10 @@ public class RecordatorioController {
     }
 
     @GetMapping
-    public List<Recordatorio> obtenerTodos() {
+    public List<Recordatorio> obtenerTodos(@RequestParam(required = false) Long usuarioId) {
+        if (usuarioId != null) {
+            return recordatorioRepository.findByUsuarioId(usuarioId);
+        }
         return recordatorioRepository.findAll();
     }
 

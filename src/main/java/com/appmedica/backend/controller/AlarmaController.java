@@ -81,4 +81,11 @@ public class AlarmaController {
         return ResponseEntity.ok("Alarma guardada correctamente");
     }
 
+    @DeleteMapping("/caducadas")
+    public ResponseEntity<Void> borrarAlarmasCaducadas() {
+        List<Alarma> caducadas = alarmaRepository.findByFechaBefore(LocalDate.now());
+        alarmaRepository.deleteAll(caducadas);
+        return ResponseEntity.ok().build();
+    }
+
 }
