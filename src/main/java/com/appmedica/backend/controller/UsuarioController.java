@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +41,9 @@ public class UsuarioController {
 
     @PutMapping("/usuarios/{id}")
     public Usuario actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
-        return usuarioRepository.findById(id).map(usuario -> {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
             usuario.setNombre(usuarioActualizado.getNombre());
             usuario.setApellidos(usuarioActualizado.getApellidos());
             usuario.setCorreoElectronico(usuarioActualizado.getCorreoElectronico());
@@ -50,7 +51,9 @@ public class UsuarioController {
             usuario.setFechaNacimiento(usuarioActualizado.getFechaNacimiento());
             usuario.setTelefono(usuarioActualizado.getTelefono());
             return usuarioRepository.save(usuario);
-        }).orElse(null);
+        } else {
+            return null;
+        }
     }
 
     @DeleteMapping("/usuarios/{id}")
@@ -61,7 +64,6 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByCorreoElectronico(loginRequest.getCorreoElectronico());
-
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
@@ -76,6 +78,4 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
     }
-
-
 }
